@@ -181,7 +181,6 @@ git push origin v0.1.0
 
 - [Changelog](CHANGELOG.md)
 - [Security policy](SECURITY.md)
-- [Demo screenshot guide](docs/demo.md)
 
 ## Resume Talking Points
 
