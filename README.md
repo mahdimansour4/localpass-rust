@@ -1,5 +1,7 @@
 # LocalPass
 
+[![Rust](https://github.com/mahdimansour4/localpass-rust/actions/workflows/rust.yml/badge.svg)](https://github.com/mahdimansour4/localpass-rust/actions/workflows/rust.yml)
+
 LocalPass is a fully offline command-line password manager written in Rust. It stores credentials in a single encrypted vault file and never sends data over a network.
 
 This project was built as a security-focused systems project for a resume portfolio. The main goal is to demonstrate practical cryptography usage, careful data handling, command-line application design, and test coverage around sensitive workflows.
