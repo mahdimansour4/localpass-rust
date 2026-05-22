@@ -150,3 +150,7 @@ The integration tests use temporary vault files and cover encrypted end-to-end w
 - Implemented master password rotation without changing the vault format.
 - Added integration tests for encrypted workflows including add, update, delete, search, generate-save, and rekey.
 - Documented the project threat model and avoided overclaiming security guarantees.
+
+## License
+
+MIT
