@@ -142,6 +142,29 @@ cargo test
 
 The integration tests use temporary vault files and cover encrypted end-to-end workflows.
 
+## Install Locally
+
+Build an optimized binary:
+
+```bash
+cargo build --release
+```
+
+Run it directly:
+
+```bash
+./target/release/localpass --help
+./target/release/localpass init
+```
+
+Optional: copy it into your local bin directory:
+
+```bash
+mkdir -p ~/.local/bin
+cp target/release/localpass ~/.local/bin/localpass
+localpass --help
+```
+
 ## Resume Talking Points
 
 - Built an offline password manager in Rust with a documented encrypted vault format.
