@@ -6,6 +6,8 @@ use crate::vault_file::VaultFile;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+const MIN_MASTER_PASSWORD_LEN: usize = 12;
+
 pub fn default_vault_path() -> PathBuf {
     let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_owned());
     PathBuf::from(home)
@@ -14,6 +16,8 @@ pub fn default_vault_path() -> PathBuf {
 }
 
 pub fn init_vault_with_password(path: &Path, master_password: &str) -> Result<()> {
+    validate_master_password(master_password)?;
+
     if path.exists() {
         return Err(LocalPassError::VaultAlreadyExists);
     }
@@ -121,8 +125,17 @@ pub fn rekey_vault_with_passwords(
     current_master_password: &str,
     new_master_password: &str,
 ) -> Result<()> {
+    validate_master_password(new_master_password)?;
+
     let vault = unlock_vault(path, current_master_password)?;
     save_vault(path, new_master_password, &vault)
+}
+
+fn validate_master_password(master_password: &str) -> Result<()> {
+    if master_password.trim().chars().count() < MIN_MASTER_PASSWORD_LEN {
+        return Err(LocalPassError::InvalidMasterPassword);
+    }
+    Ok(())
 }
 
 fn unlock_vault(path: &Path, master_password: &str) -> Result<Vault> {

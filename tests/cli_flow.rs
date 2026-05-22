@@ -145,10 +145,10 @@ fn rekey_changes_master_password_without_losing_entries() {
     let dir = tempdir().unwrap();
     let vault_path = dir.path().join("test.vault");
 
-    init_vault_with_password(&vault_path, "old master").unwrap();
+    init_vault_with_password(&vault_path, "old master password").unwrap();
     add_entry_with_values(
         &vault_path,
-        "old master",
+        "old master password",
         "github",
         "mahdi@example.com",
         "secret-password",
@@ -156,13 +156,37 @@ fn rekey_changes_master_password_without_losing_entries() {
     )
     .unwrap();
 
-    rekey_vault_with_passwords(&vault_path, "old master", "new master").unwrap();
+    rekey_vault_with_passwords(&vault_path, "old master password", "new master password").unwrap();
 
-    let old_result = read_password_with_password(&vault_path, "old master", "github");
+    let old_result = read_password_with_password(&vault_path, "old master password", "github");
     assert!(matches!(old_result, Err(LocalPassError::UnlockFailed)));
 
-    let password = read_password_with_password(&vault_path, "new master", "github").unwrap();
+    let password =
+        read_password_with_password(&vault_path, "new master password", "github").unwrap();
     assert_eq!(password, "secret-password");
+}
+
+#[test]
+fn init_rejects_short_master_password() {
+    let dir = tempdir().unwrap();
+    let vault_path = dir.path().join("test.vault");
+
+    let result = init_vault_with_password(&vault_path, "short");
+
+    assert!(matches!(result, Err(LocalPassError::InvalidMasterPassword)));
+    assert!(!vault_path.exists());
+}
+
+#[test]
+fn rekey_rejects_short_new_master_password() {
+    let dir = tempdir().unwrap();
+    let vault_path = dir.path().join("test.vault");
+
+    init_vault_with_password(&vault_path, "master password").unwrap();
+
+    let result = rekey_vault_with_passwords(&vault_path, "master password", "short");
+
+    assert!(matches!(result, Err(LocalPassError::InvalidMasterPassword)));
 }
 
 #[test]

@@ -23,6 +23,9 @@ pub enum LocalPassError {
     #[error("invalid password generator options")]
     InvalidGeneratorOptions,
 
+    #[error("master password must be at least 12 non-whitespace characters")]
+    InvalidMasterPassword,
+
     #[error("I/O error: {0}")]
     Io(#[from] std::io::Error),
 
