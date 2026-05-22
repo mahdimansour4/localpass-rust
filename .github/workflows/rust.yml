@@ -20,6 +20,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check dependency policy
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check bans licenses sources
+
       - name: Check formatting
         run: cargo fmt --check
 

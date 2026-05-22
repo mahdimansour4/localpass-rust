@@ -1,5 +1,6 @@
 use crate::error::{LocalPassError, Result};
-use rand::{RngCore, rngs::OsRng};
+use rand::distributions::{Distribution, Uniform};
+use rand::rngs::OsRng;
 
 const LOWER: &[u8] = b"abcdefghijklmnopqrstuvwxyz";
 const UPPER: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -31,8 +32,10 @@ pub fn generate_password(options: &GeneratorOptions) -> Result<String> {
     }
 
     let mut output = String::with_capacity(options.length);
+    let distribution = Uniform::from(0..alphabet.len());
+    let mut rng = OsRng;
     for _ in 0..options.length {
-        let index = (OsRng.next_u32() as usize) % alphabet.len();
+        let index = distribution.sample(&mut rng);
         output.push(alphabet[index] as char);
     }
     Ok(output)
@@ -68,5 +71,22 @@ mod tests {
             result,
             Err(LocalPassError::InvalidGeneratorOptions)
         ));
+    }
+
+    #[test]
+    fn respects_disabled_character_sets() {
+        let password = generate_password(&GeneratorOptions {
+            length: 64,
+            symbols: false,
+            no_upper: true,
+            no_digits: true,
+        })
+        .unwrap();
+
+        assert!(
+            password
+                .chars()
+                .all(|character| character.is_ascii_lowercase())
+        );
     }
 }

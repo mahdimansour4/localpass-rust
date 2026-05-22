@@ -2,6 +2,8 @@
 
 [![Rust](https://github.com/mahdimansour4/localpass-rust/actions/workflows/rust.yml/badge.svg)](https://github.com/mahdimansour4/localpass-rust/actions/workflows/rust.yml)
 
+![LocalPass CLI demo](assets/localpass-demo.png)
+
 LocalPass is a fully offline command-line password manager written in Rust. It stores credentials in a single encrypted vault file and never sends data over a network.
 
 This project was built as a security-focused systems project for a resume portfolio. The main goal is to demonstrate practical cryptography usage, careful data handling, command-line application design, and test coverage around sensitive workflows.
@@ -138,6 +140,7 @@ After `rekey`, use the new master password. The old master password should no lo
 ```bash
 cargo build
 cargo test
+cargo clippy -- -D warnings
 ```
 
 The integration tests use temporary vault files and cover encrypted end-to-end workflows.
@@ -164,6 +167,21 @@ mkdir -p ~/.local/bin
 cp target/release/localpass ~/.local/bin/localpass
 localpass --help
 ```
+
+## Release
+
+Optimized release builds use link-time optimization, one codegen unit, and symbol stripping. Pushing a tag like `v0.1.0` triggers the release workflow and uploads a Linux x86_64 binary archive.
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+## Project Docs
+
+- [Changelog](CHANGELOG.md)
+- [Security policy](SECURITY.md)
+- [Demo screenshot guide](docs/demo.md)
 
 ## Resume Talking Points
 
